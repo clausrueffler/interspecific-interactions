@@ -10,13 +10,13 @@ left:
 #      - text: "1. Excercise: Solutions"
 
       - text: "2. Excercise: Predator-prey with interference"
-#        href: ./EnvironmentalStochasticityNew.html
+        href: ./PredatorPreyInterference.html
 #      - text: "2. Excercise: Solutions"
 #        href: ./PopulationDynamicsSolutions.html 
 
 
 
-      - text: "3. Excercise: Predator-Prey Interactions"
-        href: ./PredatorPreyPopSam.html
+#      - text: "3. Excercise: Predator-Prey Interactions"
+#        href: ./PredatorPreyPopSam.html
 #      - text: "3. Excercise: Predator-Prey Solutions"
 #        href: ./PredatorPreySolutions.html

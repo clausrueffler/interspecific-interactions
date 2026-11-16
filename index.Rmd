@@ -4,9 +4,9 @@ output:
   html_document:
     toc: FALSE
 ---
-*Re-analyzing Crouder et al. (1987)*
+*Exploring predator-prey dynamics*
 
-This website contains the questions for the individual project *How to safe the Loggerhead sea turtle*. Click the exercise button and select the tab. A second tab containing the answers will appear after the submission deadline. Please submit your answers to the questions including the code and the output as a *Rmarkdown*-file.
+This website contains code for analyzing the Lotka-Volterra predator-prey model and two of its extensions. In a second tab, the a predator-prey model with interference competition is introduced.
 
 **Enjoy!**
 
