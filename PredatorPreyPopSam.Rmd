@@ -50,44 +50,45 @@ predpreyLV <- function(t, y, params) {
 In order to be able to analyze the dynamics described by these equations numerically, we have to choose values for the parameters. You can change these values at any time.
 
 ```{r}
-r <- 2
-a <- 0.5
-e <- 0.5
-d <- 0.35
+# parameters
+e <- 0.05
+a <- 0.05
+d <- 0.05
 ```
 
 Before we can start to simulate the dynamics we have to additionally specify the initial population densities of the prey and predator population. Also these values can be changed at any time.
 
 ```{r}
+# starting population densities
 R0 <- 2
-C0 <- 6
+C0 <- 4
 ```
 
 Now we are ready simulate the dynamics for the above set of parameters. The following code produces a plot with time on the x-axis and the resource and consumer density on the y-axis. The solid line shows the density of resources and the hatched line the density of consumers.
 
 ```{r}
 params1 <- c(r = r, a = a, e = e, d = d)
-MaxTime <- 60 # length of the time series, can be changed at any time
+MaxTime <- 200 # length of the time series, can be changed at any time
 Time <- seq(0, MaxTime, by = 0.1) # here we produce a sequence of time points at which we will determine the population densities
 LV.out <- ode(c(R0, C0), Time, predpreyLV, params1) # here we call the function "ode" that does the hard work of numerical integration and which is part of the package "deSolve"
 
-matplot(Time, (LV.out[, 2:3]), type = "l", lty = 1:2, col=1, ylab = "Population Density", xlab="Time", ylim = c(0,8))
+matplot(Time, (LV.out[, 2:3]), type = "l", lty = 1:2, col=1, ylab = "Population Density", xlab="Time")
 legend("top", c(expression("resource"), expression("consumer")), lty = 1:2, bty = "n", horiz = TRUE)
 ```
 
 Let us run (and plot) the same model as above two more times, but with somewhat different starting densities — everything else is the same. 
 
 ```{r eval=FALSE}
-R02 <- 2
+R02 <- 4
 C02 <- 5
 LV.out2 <- ode(c(R02, C02), Time, predpreyLV, params1)
 matplot(Time, (LV.out2[, 2:3]), type = "l", lty = 1:2, col=1, ylab = "Population Density", xlab="Time", ylim = c(0,8))
 legend("top", c(expression("resource"), expression("consumer")), lty = 1:2, bty = "n", horiz = TRUE)
 
-R03 <- 2
-C03 <- 4
+R03 <- 8
+C03 <- 6
 LV.out3 <- ode(c(R03, C03), Time, predpreyLV, params1)
-matplot(Time, (LV.out3[, 2:3]), type = "l", lty = 1:2, col=1, ylab = "Population Density", xlab="Time", ylim = c(0,8))
+matplot(Time, (LV.out3[, 2:3]), type = "l", lty = 1:2, col=1, ylab = "Population Density", xlab="Time")
 legend("top", c(expression("resource"), expression("consumer")), lty = 1:2, bty = "n", horiz = TRUE)
 ```
 
@@ -139,21 +140,23 @@ predprey.log.prey <- function(t, y, p) {
 To be able to compare the dynamics of this new model we choose the same parameters as above to which we have to add a value for the one new parameter, the resource carrying capacity *k*.
 
 ```{r}
-r <- 2
-e <- 0.5
-a <- 0.5
-d <- 0.35
-k <- 10
-
-R0 <- 2
-C0 <- 6
+# parameters
+r <- 0.5
+e <- 0.05
+a <- 0.05
+d <- 0.05
+k <- 150
 ```
 
 Let us run (and plot) the model.
 
 ```{r eval=FALSE}
+# starting population densities
+R0 <- 2
+C0 <- 6
+
 params.log.prey1 <- c(a = a, r = r, d = d, e = e, k = k)
-MaxTime <- 50
+MaxTime <- 200
 Time <- seq(0, MaxTime, by = 0.5)
 log.prey.out <- ode(c(R0, C0), Time, predprey.log.prey, params.log.prey1)
 
@@ -199,23 +202,25 @@ predprey.RosMac <- function(t, y, p) {
 Again, we keep the parameter values as above with one additional parameter, the handling time *h*.
 
 ```{r}
-r <- 2
-e <- 0.5
-a <- 0.5
-d <- 0.35
-k <- 10
-h <- 0.32
-
-R0 <- 2
-C0 <- 2
+# set of parameter values
+r <- 0.5
+e <- 0.05
+a <- 0.05
+d <- 0.05
+k <- 150
+h <- 0.2
 ```
 
 Let us run the model and plot the resulting time series. 
 
 ```{r eval=FALSE}
+# starting population densities
+R0 <- 20
+C0 <- 2
+
 params.RosMac1 <- c(a = a, r = r, d = d, e = e, k = k, h = h)
-MaxTime <- 300 # you can increase MaxTime if you think the dynamics have not yet reached their "endpoint"
-Time <- seq(0, MaxTime, by = 0.2)
+MaxTime <- 1000 # you can increase MaxTime if you think the dynamics have not yet reached their "endpoint"
+Time <- seq(0, MaxTime, by = 0.1)
 RosMac.out <- ode(c(R0, C0), Time, predprey.RosMac, params.RosMac1)
 
 matplot(Time, (RosMac.out[, 2:3]), type = "l", lty = 1:2, col=1, ylab = "Population Size", xlab="Time")
@@ -236,10 +241,12 @@ lines(R, RisoStable, type = "l", lty =2, ylab = "consumer", xlab = "resource", c
 
 In the following, please investigate this model in a bit more detail by varying parameters and observing how the model responds. More specifically,
 
-  1) Start by describing how the dynamics of this model differ from those of the previous two models. Also investigate the effect of changing the initial population densities. For example, choose *C(0) = 4* instead of *C(0) = 2*. 
+  1) Describe how the dynamics of this model differs from those of the previous two models.
+  
+  2) Investigate the effect of changing the initial population densities. For example, choose a combination of $R(0)$ and $C(0)$ that is located inside the loop in the current phase plane. You should observe that the dynamics now spirale outwards but reach the same *limit cycle*.
 
-  2) Note that with current the parameters, the consumer isocline (the vertical line) intersects with the resource isocline to the **left** of the maximum of the resource isocline.
-Rerun the above code but with a somewhat lower value for the handling time. For example, consider *h = 0.3* and *h = 0.25*. How does that shift the position of the consumer isocline and how does this effect the dynamics?
+  3) Note that with current the parameters, the consumer isocline (the vertical line) intersects with the resource isocline to the **left** of the maximum of the resource isocline.
+Rerun the above code but gradually lower value for the handling time, which is currently set to *h = 0.2*. How does this affect the position of the point of intersection of the consumer isocline with the resource isocline? You should observe that this will cause that the two populations ultimately settle on a equilbirium.
 
 <!--
 On the other hand, we can also shift the position of the consumer isocline further to the right by increasing *h*. What happens if we move the position of the consumer isocline further to the right so that it intersects with the resource isocline to the right of the maximum of the resource isocline? You can do this by decreasing the value of the consumer handling time *h*. For example, consider *h = 0.3* and *h = 0.25*. Describe how this changes the dynamics.
@@ -248,5 +255,5 @@ On the other hand, we can also shift the position of the consumer isocline furth
   3) What happens if you increase the value of the consumer death rate *d* even more so that the consumer isocline moves so much to the right that it does not intersect with the resource isocline any longer?
 -->
   
-  3) Go back to the original parameters with *h=0.32*. Now gradually increase the value of the resource carrying capacity *k* to ever larger values. What do you observe?
+  4) Consider an handling time of *h=0.05*. Now gradually increase the value of the resource carrying capacity *k* to ever larger values. You should observe that for some value of $K$ the stable equilibrium gives way to oscillations, and that a further increase in $K$ will results in oscillations of every larger amplitude.
   
