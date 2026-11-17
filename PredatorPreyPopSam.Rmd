@@ -13,9 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
 
-# Exercise: Predator-prey dynamics {.tabset}
+# Predator-prey dynamics {.tabset}
 
-## Basic predator-prey model
+## The basic Lotka-Volterra predator-prey model
 
 In this exercise, you will investigate the behavior of the continuous time Lotka-Volterra predator-prey model and two variants of it, using code programmed in R. Since this is a model in *continuous time*, we will use *numerical integration* in R. Thus, before you can start you have load the package **deSolve** into R.
 
@@ -51,6 +51,7 @@ In order to be able to analyze the dynamics described by these equations numeric
 
 ```{r}
 # parameters
+r <- 0.5
 e <- 0.05
 a <- 0.05
 d <- 0.05

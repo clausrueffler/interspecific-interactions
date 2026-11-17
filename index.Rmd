@@ -6,7 +6,7 @@ output:
 ---
 *Exploring predator-prey dynamics*
 
-This website contains code for analyzing the Lotka-Volterra predator-prey model and two of its extensions. In a second tab, the a predator-prey model with interference competition is introduced.
+This website contains code for analyzing the Lotka-Volterra predator-prey model and two of its extensions. In a second tab, a predator-prey model with interference competition is introduced.
 
 **Enjoy!**
 

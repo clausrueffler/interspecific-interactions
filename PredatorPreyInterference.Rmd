@@ -1,29 +1,27 @@
 ---
-title: "PredatorPreyInterference"
-author: "Claus Rüffler"
-date: "2026-11-16"
-output: html_document
+pagetitle: 'Exercise: Predator-prey dynamics with interference competition'
+output: 
+  html_document:
+    toc: FALSE
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Exercise: A predator-prey model with interference competition {.tabset}
-
-## Basic predator-prey model
+# A predator-prey model with interference competition
 
 Our starting point is the Rosenzweig-MacArthur model, the last model from the previous tab. This model is based on a Holling type-II functional response. This means that the per-capita resource uptake is a saturating function of resource density, where the saturation is the result of predators spending more and more time handling prey instead of looking for new prey. We derived this functional response from first principle in Ecology D.
 
-Let us assume that the same logic that led to the Holling type-II functional response also applies to interference competition: Each time a predator encounters another predator individual, the two predator interfere (fight) with each other for a time intervall of length $g$. Including this leads to
+Let us assume that the same logic that led to the Holling type-II functional response also applies to interference competition: Each time a predator encounters another predator individual, the two predator interfere (fight) with each other for a time interval of length $g$. Including this leads to
 
 $$
 f(N, C) = \frac{a R}{1 + a h R + a g C}.
 $$
 
-This functional response is known as the *Beddington*-functional response. If $g = 0$, this equation simplifies to the Holling type-II functional response. On the other hand, for $h = 0$ we obtain a linear functional response, with slope $a / (1 + a g C)$. Hence, the rate of food uptake decreases with increasing consumer density $C$. If $h \neq 0 \neq g$, then the rate of food uptake is saturating in $R$, and it saturates faster with increasing $C$. Let us explore this function by plotting if for different predator densities $C$.
+This functional response is known as the *Beddington*-functional response. If $g = 0$, this equation simplifies to the Holling type-II functional response. On the other hand, for $h = 0$ we obtain a functional response based on only interference competition, resulting in a linear functional response with slope $a / (1 + a g C)$. Hence, the rate of food uptake decreases with increasing consumer density $C$. If $h \neq 0 \neq g$, then the rate of food uptake is saturating in $R$, and it saturates faster with increasing $C$. Let us explore this function by plotting if for different predator densities $C$.
 
-```{r, fig.width=12, fig.height=5}
+```{r echo=FALSE, fig.width=12, fig.height=5}
 Beddington <- function(a, h, g, R, C){
   (a * R)/(1 + a * h * R + a * g * C)
 }
@@ -31,24 +29,24 @@ Beddington <- function(a, h, g, R, C){
 par(mfrow = c(1, 3))
 
 colors <- rainbow(1)
-curve(Beddington(a = 1, h = 1, g = 1, x, C = 1), from = 0, to = 20, xlab = "prey density", ylab = expression("resource uptake, " ~f(R, C)), col = colors[1])
-title(main = "h = 2, g = 0")
+curve(Beddington(a = 1, h = 2, g = 0, x, C = 1), from = 0, to = 20, xlab = "prey density", ylab = expression("resource uptake, " ~f(R, C)), col = colors[1])
+title(main = "h = 2, g = 0") # only handling time, as in Rosenzweig-MacArthur
 
 colors <- rainbow(4)
 curve(Beddington(a = 1, h = 1, g = 1, x, C = 1), from = 0, to = 20, xlab = "prey density", ylab = expression("resource uptake, " ~f(R, C)), col = colors[1])
 curve(Beddington(a = 1, h = 1, g = 1, x, C = 2), from = 0, to = 20, add = TRUE, col = colors[2])
 curve(Beddington(a = 1, h = 1, g = 1, x, C = 5), from = 0, to = 20, add = TRUE, col = colors[3])
 curve(Beddington(a = 1, h = 1, g = 1, x, C = 10), from = 0, to = 20, add = TRUE, col = colors[4])
-title(main = "h = 1, g = 1")
+title(main = "h = 1, g = 1") # handling time and interference competition
 
 legend("topleft", legend = c("C = 1", "C = 2", "C = 5", "C = 10"), col = colors, lty = 1, lwd = 2, bty = "n")
 
 colors <- rainbow(4)
-curve(Beddington(a = 1, h = 0, g = 1, x, C = 1), from = 0, to = 20, xlab = "prey density", ylab = expression("resource uptake, " ~f(R, C)), col = colors[1])
-curve(Beddington(a = 1, h = 0, g = 1, x, C = 2), from = 0, to = 20, add = TRUE, col = colors[2])
-curve(Beddington(a = 1, h = 0, g = 1, x, C = 5), from = 0, to = 20, add = TRUE, col = colors[3])
-curve(Beddington(a = 1, h = 0, g = 1, x, C = 10), from = 0, to = 20, add = TRUE, col = colors[4])
-title(main = "h = 0, g = 2")
+curve(Beddington(a = 1, h = 0, g = 2, x, C = 1), from = 0, to = 20, xlab = "prey density", ylab = expression("resource uptake, " ~f(R, C)), col = colors[1])
+curve(Beddington(a = 1, h = 0, g = 2, x, C = 2), from = 0, to = 20, add = TRUE, col = colors[2])
+curve(Beddington(a = 1, h = 0, g = 2, x, C = 5), from = 0, to = 20, add = TRUE, col = colors[3])
+curve(Beddington(a = 1, h = 0, g = 2, x, C = 10), from = 0, to = 20, add = TRUE, col = colors[4])
+title(main = "h = 0, g = 2") # only interference competition
 
 legend("topleft", legend = c("C = 1", "C = 2", "C = 5", "C = 10"), col = colors, lty = 1, lwd = 2, bty = "n")
 ```
@@ -57,30 +55,85 @@ Using this functional response, the predator prey system can be written as
 
 $$
 \begin{align}
-\frac{\mathrm{d}R}{\mathrm{d}t}&=Rr\bigg(1-\frac{R}{K}\bigg) - f(R, C)\\
-\frac{\mathrm{d}C}{\mathrm{d}t}&=e f(R, C) - dC.
+\frac{\mathrm{d}R}{\mathrm{d}t}&=Rr\bigg(1-\frac{R}{K}\bigg) - \frac{a R C}{1 + a h R + a g C}\\
+\frac{\mathrm{d}C}{\mathrm{d}t}&=e \frac{a R C}{1 + a h R + a g C} - dC.
 \end{align}
 $$
 
-The goal is to investigate how interference competition affects two predictions form the Rosenzweig-MacArthur model:
-
-1)
-By how much is the prey population density at equilibrium affected by predators?
-
-2)
-Do the dynamics result in sustained cycles are a stable equilibrium?
-
-To analyze these questions it is useful to first obtain the equations for the prey and predator isoclines, just as we did for the previous models. For the model with interference competition, these equations are complicated and I give them here:
+To analyze this model, it is useful to first obtain the equations for the prey and predator isoclines, just as we did for the previous models. For the model with interference competition, these equations are a abit cumbersome and I give them here:
 
 $$
 \begin{align}
 C & = \frac{(1 + a h R)(K - R)r}{a K - a g (K - R) r} \hspace{1 cm} \text{prey isocline}\\
-C & = \frac{(e - d h)}{d g} R - \frac{1}{a g} \hspace{2.1 cm} \text{predator isocline}
+C & = \frac{(e - d h)}{d g} R - \frac{1}{a g} \hspace{1.55 cm} \text{predator isocline}
 \end{align}
 $$
 
-```{r}
+## How does interference competition modify predictions from classical predator-prey models?
 
+The goal of this exercise is to investigate how interference competition affects **two** predictions form the Rosenzweig-MacArthur-model (RMA-model for short).
+
+1)
+*The RMA-model predicts that predation significantly reduces equilibrium prey population size.* At equilibrium with predators present the resource density is given by $R^* = d/(a(e - hd))$. This value is usually much lower than $K$, the resource density in the absence of predation. Note, that this equilibrium density depends only on parameters of the predator. How is this prediction modified by interference competition? Does the prey species suffer or benefit from interference competition between predators?
+Can you sketch a bifurcation diagram showing the predator and prey equilibrium population density if the strength of interference competition (determined by the parameter $g$) gradually increases, either in absolute terms or relative to the length of the handling time $h$.
+How bad is predation for prey populations, what do you conclude? If you were to write the next ecology text book, what would be your take-home message for the next generation of students based on this model that incorporates interference competition?
+
+2)
+*The RMA-model predicts sustained population cycles.* Specifically, the equilibrium point given by the intersection of the two isoclines becomes unstable if $K > (e + hd)/(ah(e - hd))$. If this condition is fulfilled, a never-ending predator-prey cycle is predicted. How does interference competition affect this prediction? Does it facilitate or hinder cyclic dynamics? How is the amplitude of cycles affected by interference competition?
+
+Some thoughts about how to address these questions:
+
+i)
+Recycle the code from the RMA-model but with updated functional response $f(R, C)$.
+
+ii)
+Start with the parameter values form the Rosenzweig-MacArthur model from the previous tab.
+
+iii)
+You can read the equilibrium density as the last entry in the data frame that stores the timeseries generated by the function ```ode()```. Whether or not the population cycle will be visible from the phase plane plot.
+
+iv)
+You should mostly vary three parameter, namely $h$, $g$, and $K$.
+You vary $h$ (the time it takes to handle a prey) and $g$ (the time it takes to fight with another predator) to change how handling time and interference competition affect the model predictions. You can vary these parameters in many different ways, for example, you could vary both $g$ and $h$ between $0.001$ and $0.2$ in steps of $0.05$ (you have to avoid using $g$ and $h$ exactly equal to one as then the formulas for the isoclines do not work). This would give you 25 parameter combinations.
+You vary $K$ because increasing it makes population cycles more likely.
+But these are just suggestions. Do whatever you feel gives you a good understanding how these parameters affect the properties of interest.
+
+
+```{r echo=FALSE, eval=FALSE}
+library(knitr)
+library(kableExtra)
+
+tab <- data.frame(
+  g = c("0.00", "0.05", "0.10", "0.15", "0.20"),
+  "0.00" = "",
+  "0.05" = "",
+  "0.10" = "",
+  "0.15" = "",
+  "0.20" = "",
+  check.names = FALSE
+)
+
+kable(tab, align = "c") %>%
+  add_header_above(c(" " = 1, "h" = 5))
+```
+
+
+\begin{table}
+\centering \begin{tabular}{c|ccccc}\hline
+& \multicolumn{5}{c}{$h$} \\
+\cline{2-6} $g$ & 0.00 & 0.05 & 0.10 & 0.15 & 0.20 \\
+\hline 0.00 & & & & & \\
+0.05 & & & & & \\
+0.10 & & & & & \\
+0.15 & & & & & \\
+0.20 & & & & & \\ \hline
+\end{tabular} \caption{Values for combinations of parameters $g$ and $h$.}
+\end{table}
+
+
+
+
+```{r echo=FALSE, eval=FALSE}
 predprey.interference <- function(t, y, p) {
   R <- y[1]
   C <- y[2]
@@ -91,26 +144,26 @@ predprey.interference <- function(t, y, p) {
   })
 }
 
-r <- 2
-e <- 0.5
-a <- 0.5
-d <- 0.35
-k <- 10
-h <- 0.35
-g <- 0.35
+r <- 0.5
+e <- 0.05
+a <- 0.05
+d <- 0.05
+k <- 250
+h <- 0.1
+g <- 0.00001
 
-R0 <- 2
-C0 <- 2
+R0 <- 20
+C0 <- 5
 
 params <- c(r = r, k = k, a = a, h = h, g = g, e = e, d = d)
-MaxTime <- 150 # you can increase MaxTime if you think the dynamics have not yet reached their "endpoint"
-Time <- seq(0, MaxTime, by = 0.5)
+MaxTime <- 1000 # you can increase MaxTime if you think the dynamics have not yet reached their "endpoint"
+Time <- seq(0, MaxTime, by = 0.1)
 interference.out <- ode(c(R0, C0), Time, predprey.interference, params)
 
 matplot(Time, (interference.out[, 2:3]), type = "l", lty = 1:2, col=1, ylab = "Population Size", xlab="Time")
 legend("top", c(expression("resource"), expression("consumer")), lty = 1:2, bty = "n")
 
-plot(interference.out[, 2], interference.out[, 3], type = "l",  lty = 1, col = 1, xlim = c(0, 10), ylim = c(0, 8), ylab = "consumer", xlab = "resource")
+plot(interference.out[, 2], interference.out[, 3], type = "l",  lty = 1, col = 1, xlim = c(0, 100), ylim = c(0, 20), ylab = "consumer", xlab = "resource")
 abline(a = -1/(a*g), b = (e - d * h) / (d * g), lty = 2, col = "blue") # consumer isocline, an angled line
 
 # to produce the graph for the resource isocline requires a bit more work since the now becomes a "curve" instead of a straight line
@@ -118,5 +171,126 @@ R <- 0:k
 Riso <- function(R, r, k, a, h, g, e){
   (((1 + a * h * R) * (k - R) * r) / (a * k - a * g * (k - R) * r))
   }
-curve(Riso(x, r, k, a, h, g, e), from = 0, to = 10, type = "l", lty =2, ylab = "consumer", xlab = "resource", col = "red", ylim = c(0, 10), add = TRUE) # resource isocline
+curve(Riso(x, r, k, a, h, g, e), from = 0, to = k, type = "l", lty =2, ylab = "consumer", xlab = "resource", col = "red", ylim = c(0, 10), add = TRUE) # resource isocline
 ```
+
+
+```{r echo=FALSE, eval=FALSE}
+# parameters
+r <- 1
+a <- 1
+h <- 0.1
+g <- 0.000001
+e <- 0.5
+d <- 0.1
+
+# predator isocline
+Cstar <- function(R){
+  (a * (e - d * h) * R - d) / (a * d * g)
+}
+
+# prey equilibrium equation after substitution
+prey_eq <- function(R, K){
+
+  C <- Cstar(R)
+
+  f <- a * R / (1 + a * h * R + a * g * C)
+
+  r * R * (1 - R / K) - f * C
+}
+
+Kvals <- seq(0.23, 2, by = 0.05)
+
+R.eq <- rep(NA, length(Kvals))
+C.eq <- rep(NA, length(Kvals))
+
+for(i in seq_along(Kvals)){
+
+  K <- Kvals[i]
+
+  sol <- uniroot(
+    prey_eq,
+    interval = c(0.01, K),
+    K = K
+  )$root
+
+  R.eq[i] <- sol
+  C.eq[i] <- Cstar(sol)
+}
+
+plot(Kvals, R.eq,
+     type = "l",
+     lwd = 2,
+     col = "blue",
+     ylim = c(0, max(R.eq, C.eq)),
+     xlab = "Carrying capacity K",
+     ylab = "Equilibrium density")
+
+lines(Kvals, C.eq,
+      lwd = 2,
+      col = "red")
+
+legend("center",
+       legend = c(expression(R^"*"),
+                  expression(C^"*")),
+       col = c("blue", "red"),
+       lwd = 2)
+```
+
+```{r echo=FALSE, eval=FALSE}
+Rstar <- function(K, a, e, d, h, g, r){
+
+  (a * K * (d * h + e * (-1 + g * r)) +
+     sqrt(a * K *
+            (4 * d * e * g * r +
+               a * K * (-e + d * h + e * g * r)^2))) /
+    (2 * a * e * g * r)
+
+}
+
+Cstar <- function(K, a, e, d, h, g, r){
+
+  (-2 * d * e * g * r +
+     a * (e - d * h) * K * (d * h + e * (-1 + g * r)) +
+     e * sqrt(a * K *
+                (4 * d * e * g * r +
+                   a * K * (-e + d * h + e * g * r)^2)) -
+     d * h * sqrt(a * K *
+                    (4 * d * e * g * r +
+                       a * K * (-e + d * h + e * g * r)^2))) /
+    (2 * a * d * e * g^2 * r)
+
+}
+
+# parameters
+a <- 1
+e <- 0.5
+d <- 0.2
+h <- 0.2
+g <- 0.000001
+r <- 1
+
+K <- seq(0, 1, by = 0.01)
+
+R.eq <- Rstar(K, a, e, d, h, g, r)
+C.eq <- Cstar(K, a, e, d, h, g, r)
+
+plot(K, R.eq,
+     type = "l",
+     lwd = 2,
+     col = "blue",
+     ylim = c(0, 1),
+     xlab = "Carrying capacity K",
+     ylab = "Equilibrium density")
+
+lines(K, C.eq,
+      lwd = 2,
+      col = "red")
+
+legend("topleft",
+       legend = c(expression(R^"*"),
+                  expression(C^"*")),
+       col = c("blue", "red"),
+       lwd = 2)
+```
+
