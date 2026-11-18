@@ -9,6 +9,10 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c('top', 'right'))
+```
+
 # A predator-prey model with interference competition
 
 Our starting point is the Rosenzweig-MacArthur model, the last model from the previous tab. This model is based on a Holling type-II functional response. This means that the per-capita resource uptake is a saturating function of resource density, where the saturation is the result of predators spending more and more time handling prey instead of looking for new prey. We derived this functional response from first principle in Ecology D.

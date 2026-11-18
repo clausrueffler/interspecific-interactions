@@ -14,7 +14,8 @@ left:
 #      - text: "2. Excercise: Solutions"
 #        href: ./PopulationDynamicsSolutions.html 
 
-
+      - text: "3. The Tilman resource competition model"
+        href: ./Tilman.html
 
 #      - text: "3. Excercise: Predator-Prey Interactions"
 #        href: ./PredatorPreyPopSam.html
