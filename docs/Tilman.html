@@ -305,17 +305,17 @@ other to extinction?</p>
   })
 }</code></pre>
 <pre class="r"><code># parameter values
-i1 &lt;- 0.2
+i1 &lt;- 0.5
 i2 &lt;- 0.5
 m1 &lt;- 0.1
 m2 &lt;- 0.1
 a11 &lt;- 0.5
 a21 &lt;- 0.4
 a12 &lt;- 0.4
-a22 &lt;- 0.6
+a22 &lt;- 0.5
 e11 &lt;- 0.04
-e21 &lt;- 0.05
-e12 &lt;- 0.05
+e21 &lt;- 0.06
+e12 &lt;- 0.06
 e22 &lt;- 0.04
 d1 &lt;- 0.05
 d2 &lt;- 0.05
@@ -326,7 +326,7 @@ R20 &lt;- i2/m2 # R2 at predator-free equilibrium
 C10 &lt;- 0.002
 C20 &lt;- 0.001
 
-MaxTime &lt;- 2000
+MaxTime &lt;- 10000
 Time &lt;- seq(0, MaxTime, by = 0.1)
 params &lt;- c(i1, i2, m1, m2, a11, a12, a21, a22, e11, e12, a21, a22, d1, d2)
 color &lt;- rainbow(4) # colors for the plot
@@ -337,6 +337,14 @@ data &lt;- ode(c(R10, R20, C10, C20), Time, Tilman, params)</code></pre>
 <pre class="r"><code>matplot(Time, (data[, 2:5]), type = &quot;l&quot;, lty = 1, col=color, ylab = &quot;Population Density&quot;, xlab=&quot;Time&quot;, ylim = c(0,2))
 legend(&quot;topright&quot;, c(expression(&quot;R1&quot;), expression(&quot;R2&quot;), expression(&quot;C1&quot;), expression(&quot;C2&quot;)), lty = 1, col = color, bty = &quot;n&quot;, horiz = TRUE)</code></pre>
 <p><img src="Tilman_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code># options(scipen = 0) # default
+options(scipen = 999) # suppresses scientific notation
+
+data[length(Time), ]</code></pre>
+<pre><code>##             time                1                2                3 
+## 10000.0000000000     1.0304753086     1.2246329107     0.7699150160 
+##                4 
+##     0.0006390506</code></pre>
 </div>
 
 
