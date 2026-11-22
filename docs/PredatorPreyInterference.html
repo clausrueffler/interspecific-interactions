@@ -11,10 +11,9 @@
 
 
 
-<title>Exercise: Predator-prey dynamics with interference
-competition</title>
+<title>Exercise: Predator-prey dynamics with interference competition</title>
 
-<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
@@ -183,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -192,9 +191,16 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
+  content: "&#xe258;";
   border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -285,128 +291,42 @@ $(document).ready(function () {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
-<div id="a-predator-prey-model-with-interference-competition"
-class="section level1">
+<div id="a-predator-prey-model-with-interference-competition" class="section level1">
 <h1>A predator-prey model with interference competition</h1>
-<p>Our starting point is the Rosenzweig-MacArthur model, the last model
-from the previous tab. This model is based on a Holling type-II
-functional response. This means that the per-capita resource uptake is a
-saturating function of resource density, where the saturation is the
-result of predators spending more and more time handling prey instead of
-looking for new prey. We derived this functional response from first
-principle in Ecology D.</p>
-<p>Let us assume that the same logic that led to the Holling type-II
-functional response also applies to interference competition: Each time
-a predator encounters another predator individual, the two predator
-interfere (fight) with each other for a time interval of length <span
-class="math inline">\(g\)</span>. Including this leads to</p>
+<p>Our starting point is the Rosenzweig-MacArthur model, the last model from the previous tab. This model is based on a Holling type-II functional response. This means that the per-capita resource uptake is a saturating function of resource density, where the saturation is the result of predators spending more and more time handling prey instead of looking for new prey. We derived this functional response from first principles in Ecology D.</p>
+<p>Let us assume that the same logic that led to the Holling type-II functional response also applies to interference competition: Each time a predator encounters another predator individual, the two predator interfere (fight) with each other for a time interval of length <span class="math inline">\(g\)</span>. Including this leads to</p>
 <p><span class="math display">\[
 f(N, C) = \frac{a R}{1 + a h R + a g C}.
 \]</span></p>
-<p>This functional response is known as the
-<em>Beddington</em>-functional response. If <span
-class="math inline">\(g = 0\)</span>, this equation simplifies to the
-Holling type-II functional response. On the other hand, for <span
-class="math inline">\(h = 0\)</span> we obtain a functional response
-based on only interference competition, resulting in a linear functional
-response with slope <span class="math inline">\(a / (1 + a g
-C)\)</span>. Hence, the rate of food uptake decreases with increasing
-consumer density <span class="math inline">\(C\)</span>. If <span
-class="math inline">\(h \neq 0 \neq g\)</span>, then the rate of food
-uptake is saturating in <span class="math inline">\(R\)</span>, and it
-saturates faster with increasing <span class="math inline">\(C\)</span>.
-Let us explore this function by plotting if for different predator
-densities <span class="math inline">\(C\)</span>.</p>
+<p>This functional response is known as the <em>Beddington</em>-functional response. If <span class="math inline">\(g = 0\)</span>, this equation simplifies to the Holling type-II functional response. On the other hand, for <span class="math inline">\(h = 0\)</span> we obtain a functional response based on only interference competition, resulting in a linear functional response with slope <span class="math inline">\(a / (1 + a g C)\)</span>. Hence, the rate of food uptake decreases with increasing consumer density <span class="math inline">\(C\)</span>. If <span class="math inline">\(h \neq 0 \neq g\)</span>, then the rate of food uptake is saturating in <span class="math inline">\(R\)</span>, and it saturates faster with increasing <span class="math inline">\(C\)</span>. Let us explore this function by plotting if for different predator densities <span class="math inline">\(C\)</span>.</p>
 <p><img src="PredatorPreyInterference_files/figure-html/unnamed-chunk-1-1.png" width="1152" /></p>
-<p>Using this functional response, the predator prey system can be
-written as</p>
+<p>Using this functional response, the predator prey system can be written as</p>
 <p><span class="math display">\[
 \begin{align}
-\frac{\mathrm{d}R}{\mathrm{d}t}&amp;=Rr\bigg(1-\frac{R}{K}\bigg) -
-\frac{a R C}{1 + a h R + a g C}\\
-\frac{\mathrm{d}C}{\mathrm{d}t}&amp;=e \frac{a R C}{1 + a h R + a g C} -
-dC.
+\frac{\mathrm{d}R}{\mathrm{d}t}&amp;=Rr\bigg(1-\frac{R}{K}\bigg) - \frac{a R C}{1 + a h R + a g C}\\
+\frac{\mathrm{d}C}{\mathrm{d}t}&amp;=e \frac{a R C}{1 + a h R + a g C} - dC.
 \end{align}
 \]</span></p>
-<p>To analyze this model, it is useful to first obtain the equations for
-the prey and predator isoclines, just as we did for the previous models.
-For the model with interference competition, these equations are a abit
-cumbersome and I give them here:</p>
+<p>To analyze this model, it is useful to first obtain the equations for the prey and predator isoclines, just as we did for the previous models. For the model with interference competition, these equations are a abit cumbersome and I give them here:</p>
 <p><span class="math display">\[
 \begin{align}
-C &amp; = \frac{(1 + a h R)(K - R)r}{a K - a g (K - R) r} \hspace{1 cm}
-\text{prey isocline}\\
-C &amp; = \frac{(e - d h)}{d g} R - \frac{1}{a g} \hspace{1.55 cm}
-\text{predator isocline}
+C &amp; = \frac{(1 + a h R)(K - R)r}{a K - a g (K - R) r} \hspace{1 cm} \text{prey isocline}\\
+C &amp; = \frac{(e - d h)}{d g} R - \frac{1}{a g} \hspace{1.55 cm} \text{predator isocline}
 \end{align}
 \]</span></p>
-<div
-id="how-does-interference-competition-modify-predictions-from-classical-predator-prey-models"
-class="section level2">
-<h2>How does interference competition modify predictions from classical
-predator-prey models?</h2>
-<p>The goal of this exercise is to investigate how interference
-competition affects <strong>two</strong> predictions form the
-Rosenzweig-MacArthur-model (RMA-model for short).</p>
+<div id="how-does-interference-competition-modify-predictions-from-classical-predator-prey-models" class="section level2">
+<h2>How does interference competition modify predictions from classical predator-prey models?</h2>
+<p>The goal of this exercise is to investigate how interference competition affects <strong>two</strong> predictions form the Rosenzweig-MacArthur-model (RMA-model for short).</p>
 <ol style="list-style-type: decimal">
-<li><p><em>The RMA-model predicts that predation significantly reduces
-equilibrium prey population size.</em> At equilibrium with predators
-present the resource density is given by <span class="math inline">\(R^*
-= d/(a(e - hd))\)</span>. This value is usually much lower than <span
-class="math inline">\(K\)</span>, the resource density in the absence of
-predation. Note, that this equilibrium density depends only on
-parameters of the predator. How is this prediction modified by
-interference competition? Does the prey species suffer or benefit from
-interference competition between predators? Can you sketch a bifurcation
-diagram showing the predator and prey equilibrium population density if
-the strength of interference competition (determined by the parameter
-<span class="math inline">\(g\)</span>) gradually increases, either in
-absolute terms or relative to the length of the handling time <span
-class="math inline">\(h\)</span>. How bad is predation for prey
-populations, what do you conclude? If you were to write the next ecology
-text book, what would be your take-home message for the next generation
-of students based on this model that incorporates interference
-competition?</p></li>
-<li><p><em>The RMA-model predicts sustained population cycles.</em>
-Specifically, the equilibrium point given by the intersection of the two
-isoclines becomes unstable if <span class="math inline">\(K &gt; (e +
-hd)/(ah(e - hd))\)</span>. If this condition is fulfilled, a
-never-ending predator-prey cycle is predicted. How does interference
-competition affect this prediction? Does it facilitate or hinder cyclic
-dynamics? How is the amplitude of cycles affected by interference
-competition?</p></li>
+<li><p><em>The RMA-model predicts that predation significantly reduces equilibrium prey population size.</em> At equilibrium with predators present the resource density is given by <span class="math inline">\(R^* = d/(a(e - hd))\)</span>. This value is usually much lower than <span class="math inline">\(K\)</span>, the resource density in the absence of predation. Note, that this equilibrium density depends only on parameters of the predator. How is this prediction modified by interference competition? Does the prey species suffer or benefit from interference competition between predators? Can you sketch a bifurcation diagram showing the predator and prey equilibrium population density if the strength of interference competition (determined by the parameter <span class="math inline">\(g\)</span>) gradually increases, either in absolute terms or relative to the length of the handling time <span class="math inline">\(h\)</span>. How bad is predation for prey populations, what do you conclude? If you were to write the next ecology text book, what would be your take-home message for the next generation of students based on this model that incorporates interference competition?</p></li>
+<li><p><em>The RMA-model predicts sustained population cycles.</em> Specifically, the equilibrium point given by the intersection of the two isoclines becomes unstable if <span class="math inline">\(K &gt; (e + hd)/(ah(e - hd))\)</span>. If this condition is fulfilled, a never-ending predator-prey cycle is predicted. How does interference competition affect this prediction? Does it facilitate or hinder cyclic dynamics? How is the amplitude of cycles affected by interference competition?</p></li>
 </ol>
 <p>Some thoughts about how to address these questions:</p>
 <ol style="list-style-type: lower-roman">
-<li><p>Recycle the code from the RMA-model but with updated functional
-response <span class="math inline">\(f(R, C)\)</span>.</p></li>
-<li><p>Start with the parameter values form the Rosenzweig-MacArthur
-model from the previous tab.</p></li>
-<li><p>You can read the equilibrium density as the last entry in the
-data frame that stores the timeseries generated by the function
-<code>ode()</code>. Whether or not the population cycle will be visible
-from the phase plane plot.</p></li>
-<li><p>You should mostly vary three parameter, namely <span
-class="math inline">\(h\)</span>, <span
-class="math inline">\(g\)</span>, and <span
-class="math inline">\(K\)</span>. You vary <span
-class="math inline">\(h\)</span> (the time it takes to handle a prey)
-and <span class="math inline">\(g\)</span> (the time it takes to fight
-with another predator) to change how handling time and interference
-competition affect the model predictions. You can vary these parameters
-in many different ways, for example, you could vary both <span
-class="math inline">\(g\)</span> and <span
-class="math inline">\(h\)</span> between <span
-class="math inline">\(0.001\)</span> and <span
-class="math inline">\(0.2\)</span> in steps of <span
-class="math inline">\(0.05\)</span> (you have to avoid using <span
-class="math inline">\(g\)</span> and <span
-class="math inline">\(h\)</span> exactly equal to one as then the
-formulas for the isoclines do not work). This would give you 25
-parameter combinations. You vary <span class="math inline">\(K\)</span>
-because increasing it makes population cycles more likely. But these are
-just suggestions. Do whatever you feel gives you a good understanding
-how these parameters affect the properties of interest.</p></li>
+<li><p>Recycle the code from the RMA-model but with updated functional response <span class="math inline">\(f(R, C)\)</span>.</p></li>
+<li><p>Start with the parameter values form the Rosenzweig-MacArthur model from the previous tab.</p></li>
+<li><p>You can read the equilibrium density as the last entry in the data frame that stores the timeseries generated by the function <code>ode()</code>. Whether or not the population cycle will be visible from the phase plane plot.</p></li>
+<li><p>You should mostly vary three parameter, namely <span class="math inline">\(h\)</span>, <span class="math inline">\(g\)</span>, and <span class="math inline">\(K\)</span>. You vary <span class="math inline">\(h\)</span> (the time it takes to handle a prey) and <span class="math inline">\(g\)</span> (the time it takes to fight with another predator) to change how handling time and interference competition affect the model predictions. You can vary these parameters in many different ways, for example, you could vary both <span class="math inline">\(g\)</span> and <span class="math inline">\(h\)</span> between <span class="math inline">\(0.001\)</span> and <span class="math inline">\(0.2\)</span> in steps of <span class="math inline">\(0.05\)</span> (you have to avoid using <span class="math inline">\(g\)</span> and <span class="math inline">\(h\)</span> exactly equal to <span class="math inline">\(0\)</span> as then the formulas for the isoclines result in error messages). This would give you 25 parameter combinations. You vary <span class="math inline">\(K\)</span> because increasing it makes population cycles more likely. But these are just some ideas. Do whatever you feel gives you a good understanding how these parameters affect the properties of interest!</p></li>
 </ol>
 </div>
 </div>
