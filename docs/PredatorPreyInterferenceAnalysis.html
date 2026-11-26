@@ -11,9 +11,10 @@
 
 
 
-<title>Exercise: Predator-prey dynamics with interference competition</title>
+<title>Exercise: Predator-prey dynamics with interference
+competition</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
@@ -182,8 +183,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -191,16 +192,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -291,30 +285,62 @@ $(document).ready(function () {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
-<div id="a-predator-prey-model-with-interference-competition" class="section level1">
+<div id="a-predator-prey-model-with-interference-competition"
+class="section level1">
 <h1>A predator-prey model with interference competition</h1>
-<p>Our starting point is the Rosenzweig-MacArthur model, the last model from the previous tab. This model is based on a Holling type-II functional response. This means that the per-capita resource uptake is a saturating function of resource density, where the saturation is the result of predators spending more and more time handling prey instead of looking for new prey. We derived this functional response from first principles in Ecology D.</p>
-<p>Let us assume that the same logic that led to the Holling type-II functional response also applies to interference competition: Each time a predator encounters another predator individual, the two predator interfere (fight) with each other for a time interval of length <span class="math inline">\(g\)</span>. Including this leads to</p>
+<p>Our starting point is the Rosenzweig-MacArthur model, the last model
+from the previous tab. This model is based on a Holling type-II
+functional response. This means that the per-capita resource uptake is a
+saturating function of resource density, where the saturation is the
+result of predators spending more and more time handling prey instead of
+looking for new prey. We derived this functional response from first
+principles in Ecology D.</p>
+<p>Let us assume that the same logic that led to the Holling type-II
+functional response also applies to interference competition: Each time
+a predator encounters another predator individual, the two predator
+interfere (fight) with each other for a time interval of length <span
+class="math inline">\(g\)</span>. Including this leads to</p>
 <p><span class="math display">\[
 f(N, C) = \frac{a R}{1 + a h R + a g C}.
 \]</span></p>
-<p>This functional response is known as the <em>Beddington</em>-functional response. If <span class="math inline">\(g = 0\)</span>, this equation simplifies to the Holling type-II functional response. On the other hand, for <span class="math inline">\(h = 0\)</span> we obtain a functional response based on only interference competition, resulting in a linear functional response with slope <span class="math inline">\(a / (1 + a g C)\)</span>. Hence, the rate of food uptake decreases with increasing consumer density <span class="math inline">\(C\)</span>. If <span class="math inline">\(h \neq 0 \neq g\)</span>, then the rate of food uptake is saturating in <span class="math inline">\(R\)</span>, and it saturates faster with increasing <span class="math inline">\(C\)</span>. Let us explore this function by plotting if for different predator densities <span class="math inline">\(C\)</span>.</p>
+<p>This functional response is known as the
+<em>Beddington</em>-functional response. If <span
+class="math inline">\(g = 0\)</span>, this equation simplifies to the
+Holling type-II functional response. On the other hand, for <span
+class="math inline">\(h = 0\)</span> we obtain a functional response
+based on only interference competition, resulting in a linear functional
+response with slope <span class="math inline">\(a / (1 + a g
+C)\)</span>. Hence, the rate of food uptake decreases with increasing
+consumer density <span class="math inline">\(C\)</span>. If <span
+class="math inline">\(h \neq 0 \neq g\)</span>, then the rate of food
+uptake is saturating in <span class="math inline">\(R\)</span>, and it
+saturates faster with increasing <span class="math inline">\(C\)</span>.
+Let us explore this function by plotting if for different predator
+densities <span class="math inline">\(C\)</span>.</p>
 <!--
 Let us explore this function by plotting if for different predator densities $C$.
 <img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-1-1.png" width="1152" />
 -->
-<p>Using this functional response, the predator prey system can be written as</p>
+<p>Using this functional response, the predator prey system can be
+written as</p>
 <p><span class="math display">\[
 \begin{align}
-\frac{\mathrm{d}R}{\mathrm{d}t}&amp;=Rr\bigg(1-\frac{R}{K}\bigg) - \frac{a R C}{1 + a h R + a g C}\\
-\frac{\mathrm{d}C}{\mathrm{d}t}&amp;=e \frac{a R C}{1 + a h R + a g C} - dC.
+\frac{\mathrm{d}R}{\mathrm{d}t}&amp;=Rr\bigg(1-\frac{R}{K}\bigg) -
+\frac{a R C}{1 + a h R + a g C}\\
+\frac{\mathrm{d}C}{\mathrm{d}t}&amp;=e \frac{a R C}{1 + a h R + a g C} -
+dC.
 \end{align}
 \]</span></p>
-<p>To analyze this model, it is useful to first obtain the equations for the prey and predator isoclines, just as we did for the previous models. For the model with interference competition, these equations are a abit cumbersome and I give them here:</p>
+<p>To analyze this model, it is useful to first obtain the equations for
+the prey and predator isoclines, just as we did for the previous models.
+For the model with interference competition, these equations are a abit
+cumbersome and I give them here:</p>
 <p><span class="math display">\[
 \begin{align}
-C &amp; = \frac{(1 + a h R)(K - R)r}{a K - a g (K - R) r} \hspace{1 cm} \text{prey isocline}\\
-C &amp; = \frac{(e - d h)}{d g} R - \frac{1}{a g} \hspace{1.55 cm} \text{predator isocline}
+C &amp; = \frac{(1 + a h R)(K - R)r}{a K - a g (K - R) r} \hspace{1 cm}
+\text{prey isocline}\\
+C &amp; = \frac{(e - d h)}{d g} R - \frac{1}{a g} \hspace{1.55 cm}
+\text{predator isocline}
 \end{align}
 \]</span></p>
 <!--
@@ -349,60 +375,127 @@ But these are just some ideas. Do whatever you feel gives you a good understandi
 -->
 <div id="analysis" class="section level2">
 <h2>Analysis</h2>
-<p>Let us start by looking at the equations for the two isoclines and how they change in response to <span class="math inline">\(h\)</span>, <span class="math inline">\(g\)</span> and <span class="math inline">\(K\)</span>.</p>
-<p>The first thing to notice is that the predator isocline is a linear function in <span class="math inline">\(R\)</span> with intercept <span class="math inline">\(-1 / (ag)\)</span> and slope <span class="math inline">\((e - d h) / (d g)\)</span>. Thus, this isocline is independent of <span class="math inline">\(K\)</span> and increasing <span class="math inline">\(h\)</span> decreases the slope (makes it more tilted to the right). Increasing <span class="math inline">\(g\)</span> moves the intercept closer to <span class="math inline">\(0\)</span> decreases the slope (makes it more tilted to the right). Note that <span class="math inline">\(e -d h &gt; 0\)</span> is a prerequisite for the existence of an intersection point at which the densities of both species are positive (if <span class="math inline">\(e -d h &lt; 0\)</span>, the isocline would never be in the positive quadrant).</p>
-<p>Next, let us look at the prey isocline. The effect of <span class="math inline">\(K\)</span> on this isocline seems complicated. On the other hand, both increasing <span class="math inline">\(h\)</span> and increasing <span class="math inline">\(g\)</span> increase this isocline.</p>
-<p>Let us illustrate this pattern by plotting the phase plane with the isoclines.</p>
-<pre class="r"><code># parameters
-r &lt;- 0.5
-e &lt;- 0.05
-a &lt;- 0.05
-d &lt;- 0.05
-k &lt;- 150
+<p>Let us start by looking at the equations for the two isoclines and
+how they change in response to <span class="math inline">\(h\)</span>,
+<span class="math inline">\(g\)</span> and <span
+class="math inline">\(K\)</span>.</p>
+<p>The first thing to notice is that the predator isocline is a linear
+function in <span class="math inline">\(R\)</span> with intercept <span
+class="math inline">\(-1 / (ag)\)</span> and slope <span
+class="math inline">\((e - d h) / (d g)\)</span>. Thus, this isocline is
+independent of <span class="math inline">\(K\)</span> and increasing
+<span class="math inline">\(h\)</span> decreases the slope (makes it
+more tilted to the right). Increasing <span
+class="math inline">\(g\)</span> moves the intercept closer to <span
+class="math inline">\(0\)</span> decreases the slope (makes it more
+tilted to the right). Note that <span class="math inline">\(e -d h &gt;
+0\)</span> is a prerequisite for the existence of an intersection point
+at which the densities of both species are positive (if <span
+class="math inline">\(e -d h &lt; 0\)</span>, the isocline would never
+be in the positive quadrant).</p>
+<p>Next, let us look at the prey isocline. The effect of <span
+class="math inline">\(K\)</span> on this isocline seems complicated. On
+the other hand, both increasing <span class="math inline">\(h\)</span>
+and increasing <span class="math inline">\(g\)</span> increase this
+isocline.</p>
+<p>Let us illustrate this pattern by plotting the phase plane with the
+isoclines.</p>
+<!--
+
+```r
+# my own code that makes one plot per parameter combination in h and g
+# parameters
+r <- 0.5
+e <- 0.05
+a <- 0.05
+d <- 0.05
+k <- 150
 
 # Resource isocline
-R &lt;- 0:k
-Riso &lt;- function(R, r, k, a, h, g, e){
+R <- 0:k
+Riso <- function(R, r, k, a, h, g, e){
   (((1 + a * h * R) * (k - R) * r) / (a * k - a * g * (k - R) * r))
 }
 
 # range of h- and g-values
-h &lt;- c(0.0001, 0.1, 0.2, 0.3)
-g &lt;- c(0.0001, 0.1, 0.2, 0.3, 0.4, 0.5)
+h <- c(0.0001, 0.1, 0.2, 0.3)
+g <- c(0.0001, 0.1, 0.2, 0.3, 0.4, 0.5)
 
 # parameter sweep resulting in plots for all parameter combinations
 par(mfrow=c(length(g), length(h)), mar = c(1, 1, 1.5, 0.2))
 for (i in seq_along(g)) {
   for (j in seq_along(h)) {
-    curve(Riso(x, r, k, a, h[j], g[i], e), from = 0, to = k, type = &quot;l&quot;, lty =2, col = &quot;red&quot;, ylim = c(0, 20),
-          xlab = &quot;&quot;, ylab = &quot;&quot;, main = paste0(&quot;h=&quot;, h[j], &quot;, g=&quot;, g[i]), xaxt = &quot;n&quot;, yaxt = &quot;n&quot;, asp = 1)
-    abline(a = -1/(a*g[i]), b = (e - d * h[j]) / (d * g[i]), lty = 2, col = &quot;blue&quot;) 
+    curve(Riso(x, r, k, a, h[j], g[i], e), from = 0, to = k, type = "l", lty =2, col = "red", ylim = c(0, 20),
+          xlab = "", ylab = "", main = paste0("h=", h[j], ", g=", g[i]), xaxt = "n", yaxt = "n", asp = 1)
+    abline(a = -1/(a*g[i]), b = (e - d * h[j]) / (d * g[i]), lty = 2, col = "blue") 
   }
-}</code></pre>
-<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<p>We can ask R to numerically calculate the point where the two isoclines intersect. For this, I use some code the AI produced for me.</p>
-<pre class="r"><code>Req &lt;- matrix(NA, nrow = length(g), ncol = length(h), dimnames = list(paste0(&quot;g=&quot;, g), paste0(&quot;h=&quot;, h)))
-Ceq &lt;- Req
+}
+```
+
+<img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+-->
+<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Let us produce the same plot but for <span class="math inline">\(K =
+220\)</span> instead of <span class="math inline">\(K =
+150\)</span>.</p>
+<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The important information from these graphs is how the point of
+intersection between the resource and consumer isoclines moves as we
+change parameters. What would we expect?</p>
+<p>I would expect that the equilibrium resource density increases with
+higher <span class="math inline">\(h\)</span> and <span
+class="math inline">\(g\)</span>, simply because both will make the
+predator less efficient at consuming prey. This is indeed the case as
+the consumer isocline moves to the right as <span
+class="math inline">\(h\)</span> is increased and tilts to the right as
+<span class="math inline">\(g\)</span> is increased! Thus, increasing
+interference competition makes predators less harmful for the prey!</p>
+<p>For the predator, I would have expected that increasing <span
+class="math inline">\(h\)</span> and <span
+class="math inline">\(g\)</span> would decrease equilibrium predator
+density. Interestingly, the graphs show that this is NOT the case, as
+the point of intersection moves upwards! How can we understand this? In
+my opinion, the answer must be that these changes must make the resource
+<em>more productive</em>. Indeed, note that the carrying capacity of the
+resource is currently <span class="math inline">\(K=150\)</span>. Hence,
+the resource growth rate is maximal at <span class="math inline">\(150 /
+2 = 75\)</span>. The above table show that increasing <span
+class="math inline">\(h\)</span> and <span
+class="math inline">\(g\)</span> moves the predator equilibrium density
+closer to <span class="math inline">\(75\)</span>. The resulting
+increased productivity benefits the consumer population and more than
+offsets the decreased efficiency due to higher <span
+class="math inline">\(h\)</span> and <span
+class="math inline">\(g\)</span>. This illustrates the value of
+mathematical modelling as it unveils phenomena that at first seem
+counterintuitive.</p>
+<!--
+We can ask R to numerically calculate the point where the two isoclines intersect. For this, I use some code the AI produced for me.
+
+
+```r
+Req <- matrix(NA, nrow = length(g), ncol = length(h), dimnames = list(paste0("g=", g), paste0("h=", h)))
+Ceq <- Req
 
 for(i in seq_along(g)) {
   for(j in seq_along(h)) {
-    f &lt;- function(R){
+    f <- function(R){
       Riso(R, r, k, a, h[j], g[i], e) -
         (-1/(a * g[i]) +
            ((e - d * h[j]) / (d * g[i])) * R)
       }
-    xgrid &lt;- seq(0, k, length.out = 5000)
-    ygrid &lt;- sapply(xgrid, f)
-    idx &lt;- which(
-      ygrid[-1] * ygrid[-length(ygrid)] &lt; 0
+    xgrid <- seq(0, k, length.out = 5000)
+    ygrid <- sapply(xgrid, f)
+    idx <- which(
+      ygrid[-1] * ygrid[-length(ygrid)] < 0
     )
-    if(length(idx) &gt; 0) {
-      Req[i, j] &lt;- uniroot( # use uniroot to solve for the intersection point
+    if(length(idx) > 0) {
+      Req[i, j] <- uniroot( # use uniroot to solve for the intersection point
         f,
         lower = xgrid[idx[1]],
         upper = xgrid[idx[1] + 1]
       )$root
-      Ceq[i, j] &lt;- Riso(
+      Ceq[i, j] <- Riso(
         Req[i, j],
         r, k, a,
         h[j], g[i], e
@@ -411,25 +504,33 @@ for(i in seq_along(g)) {
   }
 }
 
-round(Req, 3) # matrix of resource equilibrium values</code></pre>
-<pre><code>##         h=1e-04  h=0.1  h=0.2  h=0.3
+round(Req, 3) # matrix of resource equilibrium values
+```
+
+```
+##         h=1e-04  h=0.1  h=0.2  h=0.3
 ## g=1e-04  20.003 22.223 25.001 28.573
-## g=0.1    20.902 23.316 26.358 30.298
-## g=0.2    21.870 24.500 27.834 32.183
-## g=0.3    22.914 25.780 29.436 34.233
-## g=0.4    24.040 27.166 31.174 36.456
-## g=0.5    25.253 28.663 33.053 38.853</code></pre>
-<pre class="r"><code>round(Ceq, 3) # matrix of consumer equilibrium values</code></pre>
-<pre><code>##         h=1e-04  h=0.1  h=0.2  h=0.3
-## g=1e-04   8.668  9.465 10.417 11.565
-## g=0.1     8.995  9.846 10.863 12.089
-## g=0.2     9.341 10.249 11.334 12.639
-## g=0.3     9.707 10.675 11.830 13.210
-## g=0.4    10.094 11.123 12.348 13.798
-## g=0.5    10.501 11.593 12.885 14.395</code></pre>
-<p>What would we expect? I would expect that the equilibrium resource density increases with higher <span class="math inline">\(h\)</span> and <span class="math inline">\(g\)</span>, simply because both will make the predator less efficient at consuming prey. The first table clearly confirms this! Thus, increasing interference competition makes predators less harmful for the prey!</p>
-<p>For the predator, I would have expected that increasing <span class="math inline">\(h\)</span> and <span class="math inline">\(g\)</span> would decrease equilibrium predator density. Interestingly, the second table shows that this is NOT the case! How can we understand this? In my opinion, the answer must be that these changes must make the resource <em>more productive</em>. Indeed, note that the carrying capacity of the resource is currently <span class="math inline">\(K=150\)</span>. Hence, the resource growth rate is maximal at <span class="math inline">\(150 / 2 = 75\)</span>. The above table show that increasing <span class="math inline">\(h\)</span> and <span class="math inline">\(g\)</span> moves the predator equilibrium density closer to <span class="math inline">\(75\)</span>. The resulting increased productivity benefits the consumer population and more than offsets the decreased efficiency due to higher <span class="math inline">\(h\)</span> and <span class="math inline">\(g\)</span>. This illustrates the value of mathematical modelling as it unveils phenomena that at first seem counterintuitive.</p>
-<p>But are these equilibria always stable? Let us add the population dynamics to the phase plane plots.</p>
+## g=0.1    20.950 23.383 26.455 30.445
+## g=0.2    21.981 24.655 28.060 32.532
+## g=0.3    23.104 26.050 29.835 34.857
+## g=0.4    24.330 27.583 31.801 37.450
+## g=0.5    25.672 29.271 33.978 40.336
+```
+
+```r
+round(Ceq, 3) # matrix of consumer equilibrium values
+```
+
+```
+##         h=1e-04  h=0.1  h=0.2  h=0.3
+## g=1e-04   9.092  9.989 11.080 12.431
+## g=0.1     9.477 10.449 11.637 13.116
+## g=0.2     9.892 10.946 12.241 13.861
+## g=0.3    10.339 11.483 12.895 14.667
+## g=0.4    10.820 12.062 13.602 15.537
+## g=0.5    11.338 12.688 14.365 16.470
+```
+-->
 <pre class="r"><code># defining the ODEs
 predprey.interference &lt;- function(t, y, p) {
   R &lt;- y[1]
@@ -463,19 +564,40 @@ for (i in 1:6) {
     abline(a = -1/(a*g[i]), b = (e - d * h[j]) / (d * g[i]), lty = 2, col = &quot;blue&quot;) 
   }
 }</code></pre>
-<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>Note, that in this plot I restricted x-axes from <span class="math inline">\(5\)</span> to <span class="math inline">\(k/2 = 75\)</span>, simply to zoom-in around the region around the equilibrium point. We can make two observations. First, increasing <span class="math inline">\(h\)</span> is destabilizing the equilibrium. This is in agreement with what we know about the Rosenzweig-MacArthur model (<em>paradox of enrichment</em>). Second, increasing <span class="math inline">\(g\)</span> has the opposite effect, namely stabilizing the equilibrium. This makes intuitive sense: increasing <span class="math inline">\(g\)</span> decreases the slope of the predator isocline, sloping it more to the right. A sufficiently large increase in <span class="math inline">\(g\)</span> will cause the predator isocline to the right of the maximum of the prey isocline, which we know stabilized the equilibrium.</p>
+<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Note, that in this plot I restricted the x-axes from <span
+class="math inline">\(5\)</span> to <span class="math inline">\(k/2 =
+75\)</span>, simply to zoom-in into the region around the equilibrium
+point. We can make two observations. First, increasing <span
+class="math inline">\(h\)</span> is destabilizing the equilibrium. This
+is in agreement with what we know about the Rosenzweig-MacArthur model
+(<em>paradox of enrichment</em>). Second, increasing <span
+class="math inline">\(g\)</span> has the opposite effect, namely
+stabilizing the equilibrium. This makes intuitive sense: increasing
+<span class="math inline">\(g\)</span> decreases the slope of the
+predator isocline, sloping it more to the right. A sufficiently large
+increase in <span class="math inline">\(g\)</span> will cause the
+predator isocline to the right of the maximum of the prey isocline,
+which we know stabilized the equilibrium.</p>
 <p>Taken together, we can draw the following main conclusions.</p>
 <ol style="list-style-type: decimal">
-<li><p>Interference competition increases the equilibrium abundance of prey as predators become less harmful.</p></li>
-<li><p>Interference competition reduces the possibility for limit cycles and the population dynamics are more likely to reach fixed equilibrium densities.</p></li>
-<li><p>At lease for the parameter combinations considered above, increasing interference competition also increases predator equilibrium density. This observation is at first surprising, but can be understood based on the fact that the prey population is most productive at half the carrying capacity.</p></li>
+<li><p>Interference competition increases the equilibrium abundance of
+prey as predators become less harmful.</p></li>
+<li><p>Interference competition reduces the possibility for limit cycles
+and the population dynamics are more likely to reach fixed equilibrium
+densities.</p></li>
+<li><p>At lease for the parameter combinations considered above,
+increasing interference competition also increases predator equilibrium
+density. This observation is at first surprising, but can be understood
+based on the fact that the prey population is most productive at half
+the carrying capacity.</p></li>
 </ol>
 </div>
 </div>
-<div id="increasing-the-carryinc-capacity-form-150-to-220" class="section level1">
+<div id="increasing-the-carryinc-capacity-form-150-to-220"
+class="section level1">
 <h1>Increasing the carryinc capacity form 150 to 220</h1>
-<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <pre><code>##         h=1e-04  h=0.1  h=0.2  h=0.3
 ## g=1e-04  20.003 22.223 25.001 28.573
 ## g=0.1    20.950 23.383 26.455 30.445
@@ -490,8 +612,14 @@ for (i in 1:6) {
 ## g=0.3    10.339 11.483 12.895 14.667
 ## g=0.4    10.820 12.062 13.602 15.537
 ## g=0.5    11.338 12.688 14.365 16.470</code></pre>
-<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p>We can conclude that increasing <span class="math inline">\(K\)</span> increases the range of <span class="math inline">\(h\)</span>- and <span class="math inline">\(g\)</span>-values where we can observe a predator-prey oscillations along a stable limit cycle, but that otherwise all observations made for <span class="math inline">\(K = 150\)</span> still hold.</p>
+<p><img src="PredatorPreyInterferenceAnalysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>We can conclude that increasing <span
+class="math inline">\(K\)</span> increases the range of <span
+class="math inline">\(h\)</span>- and <span
+class="math inline">\(g\)</span>-values where we can observe a
+predator-prey oscillations along a stable limit cycle, but that
+otherwise all observations made for <span class="math inline">\(K =
+150\)</span> still hold.</p>
 </div>
 
 

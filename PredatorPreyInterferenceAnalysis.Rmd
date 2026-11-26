@@ -118,7 +118,9 @@ Next, let us look at the prey isocline. The effect of $K$ on this isocline seems
 
 Let us illustrate this pattern by plotting the phase plane with the isoclines.
 
+<!--
 ```{r}
+# my own code that makes one plot per parameter combination in h and g
 # parameters
 r <- 0.5
 e <- 0.05
@@ -146,7 +148,209 @@ for (i in seq_along(g)) {
   }
 }
 ```
+-->
 
+
+
+```{r echo=FALSE}
+# parameters
+r <- 0.5
+e <- 0.05
+a <- 0.05
+d <- 0.05
+k <- 150
+
+# Resource isocline
+Riso <- function(R, r, k, a, h, g, e) {
+  (((1 + a * h * R) * (k - R) * r) / (a * k - a * g * (k - R) * r))
+}
+
+# range of h- and g-values
+h <- c(0.0001, 0.1, 0.2, 0.3)
+g <- c(0.0001, 0.1, 0.2, 0.3, 0.4, 0.5)
+
+# Intensity scales for g
+n_g <- length(g)
+riso_cols <- colorRampPalette(c("#fcae91", "#99000d"))(n_g)
+line_cols <- colorRampPalette(c("#bdd7e7", "#08519c"))(n_g)
+
+# Reserve space on the right outer margin for the stacked legend
+par(
+  mfrow = c(2, 2),
+  mar = c(2.5, 2.5, 2.5, 1),
+  oma = c(3, 3, 1, 9)
+)
+
+for (j in seq_along(h)) {
+  for (i in seq_along(g)) {
+    is_first <- (i == 1)
+
+    curve(
+      Riso(x, r, k, a, h[j], g[i], e),
+      from = 0,
+      to = k,
+      type = "l",
+      lty = 1,
+      col = riso_cols[i],
+      lwd = 1.8,
+      ylim = c(0, 20),
+      xlab = "",
+      ylab = "",
+      main = paste0("h = ", h[j]),
+      add = !is_first
+    )
+
+    abline(
+      a = -1 / (a * g[i]),
+      b = (e - d * h[j]) / (d * g[i]),
+      lty = 1,
+      col = line_cols[i],
+      lwd = 1.8
+    )
+  }
+}
+
+mtext("resource, R", side = 1, outer = TRUE, line = 1.2)
+mtext("consumer, C", side = 2, outer = TRUE, line = 1.2)
+
+# Overlay a full-figure coordinate region to place two stacked legends on the right
+par(fig = c(0, 1, 0, 1), oma = c(3, 3, 1, 9), mar = c(0, 0, 0, 0), new = TRUE)
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1))
+
+# Top legend: Riso (red gradient)
+legend(
+  x = 1.02,
+  y = 0.88,
+  title = "resource isocline",
+  legend = paste0("g = ", g),
+  col = riso_cols,
+  lty = 1,
+  lwd = 1.8,
+  bty = "n",
+  cex = 0.8,
+  xpd = NA
+)
+
+# Bottom legend: abline (blue gradient)
+legend(
+  x = 1.02,
+  y = 0.45,
+  title = "consumer isocline",
+  legend = paste0("g = ", g),
+  col = line_cols,
+  lty = 1,
+  lwd = 1.8,
+  bty = "n",
+  cex = 0.8,
+  xpd = NA
+)
+```
+
+Let us produce the same plot but for $K = 220$ instead of $K = 150$.
+
+```{r echo=FALSE}
+# parameters
+r <- 0.5
+e <- 0.05
+a <- 0.05
+d <- 0.05
+k <- 220
+
+# Resource isocline
+Riso <- function(R, r, k, a, h, g, e) {
+  (((1 + a * h * R) * (k - R) * r) / (a * k - a * g * (k - R) * r))
+}
+
+# range of h- and g-values
+h <- c(0.0001, 0.1, 0.2, 0.3)
+g <- c(0.0001, 0.1, 0.2, 0.3, 0.4, 0.5)
+
+# Intensity scales for g
+n_g <- length(g)
+riso_cols <- colorRampPalette(c("#fcae91", "#99000d"))(n_g)
+line_cols <- colorRampPalette(c("#bdd7e7", "#08519c"))(n_g)
+
+# Reserve space on the right outer margin for the stacked legend
+par(
+  mfrow = c(2, 2),
+  mar = c(2.5, 2.5, 2.5, 1),
+  oma = c(3, 3, 1, 9)
+)
+
+for (j in seq_along(h)) {
+  for (i in seq_along(g)) {
+    is_first <- (i == 1)
+
+    curve(
+      Riso(x, r, k, a, h[j], g[i], e),
+      from = 0,
+      to = k,
+      type = "l",
+      lty = 1,
+      col = riso_cols[i],
+      lwd = 1.8,
+      ylim = c(0, 20),
+      xlab = "",
+      ylab = "",
+      main = paste0("h = ", h[j]),
+      add = !is_first
+    )
+
+    abline(
+      a = -1 / (a * g[i]),
+      b = (e - d * h[j]) / (d * g[i]),
+      lty = 1,
+      col = line_cols[i],
+      lwd = 1.8
+    )
+  }
+}
+
+mtext("resource, R", side = 1, outer = TRUE, line = 1.2)
+mtext("consumer, C", side = 2, outer = TRUE, line = 1.2)
+
+# Overlay a full-figure coordinate region to place two stacked legends on the right
+par(fig = c(0, 1, 0, 1), oma = c(3, 3, 1, 9), mar = c(0, 0, 0, 0), new = TRUE)
+plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1))
+
+# Top legend: Riso (red gradient)
+legend(
+  x = 1.02,
+  y = 0.88,
+  title = "resource isocline",
+  legend = paste0("g = ", g),
+  col = riso_cols,
+  lty = 1,
+  lwd = 1.8,
+  bty = "n",
+  cex = 0.8,
+  xpd = NA
+)
+
+# Bottom legend: abline (blue gradient)
+legend(
+  x = 1.02,
+  y = 0.45,
+  title = "consumer isocline",
+  legend = paste0("g = ", g),
+  col = line_cols,
+  lty = 1,
+  lwd = 1.8,
+  bty = "n",
+  cex = 0.8,
+  xpd = NA
+)
+```
+
+The important information from these graphs is how the point of intersection between the resource and consumer isoclines moves as we change parameters. What would we expect?
+
+I would expect that the equilibrium resource density increases with higher $h$ and $g$, simply because both will make the predator less efficient at consuming prey. This is indeed the case as the consumer isocline moves to the right as $h$ is increased and tilts to the right as $g$ is increased! Thus, increasing interference competition makes predators less harmful for the prey!
+
+For the predator, I would have expected that increasing $h$ and $g$ would decrease equilibrium predator density. Interestingly, the graphs show that this is NOT the case, as the point of intersection moves upwards! How can we understand this? In my opinion, the answer must be that these changes must make the resource *more productive*. Indeed, note that the carrying capacity of the resource is currently $K=150$. Hence, the resource growth rate is maximal at $150 / 2 = 75$. The above table show that increasing $h$ and $g$ moves the predator equilibrium density closer to $75$. The resulting increased productivity benefits the consumer population and more than offsets the decreased efficiency due to higher $h$ and $g$. This illustrates the value of mathematical modelling as it unveils phenomena that at first seem counterintuitive.
+
+
+
+<!--
 We can ask R to numerically calculate the point where the two isoclines intersect. For this, I use some code the AI produced for me.
 
 ```{r}
@@ -184,12 +388,8 @@ round(Req, 3) # matrix of resource equilibrium values
 
 round(Ceq, 3) # matrix of consumer equilibrium values
 ```
+-->
 
-What would we expect? I would expect that the equilibrium resource density increases with higher $h$ and $g$, simply because both will make the predator less efficient at consuming prey. The first table clearly confirms this! Thus, increasing interference competition makes predators less harmful for the prey!
-
-For the predator, I would have expected that increasing $h$ and $g$ would decrease equilibrium predator density. Interestingly, the second table shows that this is NOT the case! How can we understand this? In my opinion, the answer must be that these changes must make the resource *more productive*. Indeed, note that the carrying capacity of the resource is currently $K=150$. Hence, the resource growth rate is maximal at $150 / 2 = 75$. The above table show that increasing $h$ and $g$ moves the predator equilibrium density closer to $75$. The resulting increased productivity benefits the consumer population and more than offsets the decreased efficiency due to higher $h$ and $g$. This illustrates the value of mathematical modelling as it unveils phenomena that at first seem counterintuitive.
-
-But are these equilibria always stable? Let us add the population dynamics to the phase plane plots.
 
 ```{r}
 # defining the ODEs
@@ -227,7 +427,7 @@ for (i in 1:6) {
 }
 ```
 
-Note, that in this plot I restricted x-axes from $5$ to $k/2 = 75$, simply to zoom-in around the region around the equilibrium point.
+Note, that in this plot I restricted the x-axes from $5$ to $k/2 = 75$, simply to zoom-in into the region around the equilibrium point.
 We can make two observations.
 First, increasing $h$ is destabilizing the equilibrium. This is in agreement with what we know about the Rosenzweig-MacArthur model (*paradox of enrichment*).
 Second, increasing $g$ has the opposite effect, namely stabilizing the equilibrium. This makes intuitive sense: increasing $g$ decreases the slope of the predator isocline, sloping it more to the right. A sufficiently large increase in $g$ will cause the predator isocline to the right of the maximum of the prey isocline, which we know stabilized the equilibrium.
