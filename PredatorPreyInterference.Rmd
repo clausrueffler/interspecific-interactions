@@ -81,6 +81,7 @@ The goal of this exercise is to investigate how interference competition affects
 *The RMA-model predicts that predation significantly reduces equilibrium prey population size.* At equilibrium with predators present the resource density is given by $R^* = d/(a(e - hd))$. This value is usually much lower than $K$, the resource density in the absence of predation. Note, that this equilibrium density depends only on parameters of the predator. How is this prediction modified by interference competition? Does the prey species suffer or benefit from interference competition between predators?
 Can you sketch a bifurcation diagram showing the predator and prey equilibrium population density if the strength of interference competition (determined by the parameter $g$) gradually increases, either in absolute terms or relative to the length of the handling time $h$.
 How bad is predation for prey populations, what do you conclude? If you were to write the next ecology text book, what would be your take-home message for the next generation of students based on this model that incorporates interference competition?
+Similarly, if interference competition changes the equilibrium prey density, how does this, in turn, affect equilibrium predator density?
 
 2)
 *The RMA-model predicts sustained population cycles.* Specifically, the equilibrium point given by the intersection of the two isoclines becomes unstable if $K > (e + hd)/(ah(e - hd))$. If this condition is fulfilled, a never-ending predator-prey cycle is predicted. How does interference competition affect this prediction? Does it facilitate or hinder cyclic dynamics? How is the amplitude of cycles affected by interference competition?
@@ -100,7 +101,7 @@ iv)
 You should mostly vary three parameter, namely $h$, $g$, and $K$.
 You vary $h$ (the time it takes to handle a prey) and $g$ (the time it takes to fight with another predator) to change how handling time and interference competition affect the model predictions. You can vary these parameters in many different ways, for example, you could vary both $g$ and $h$ between $0.001$ and $0.2$ in steps of $0.05$ (you have to avoid using $g$ and $h$ exactly equal to one as then the formulas for the isoclines do not work). This would give you 25 parameter combinations.
 You vary $K$ because increasing it makes population cycles more likely.
-But these are just suggestions. Do whatever you feel gives you a good understanding how these parameters affect the properties of interest.
+But these are just suggestions. Do whatever you feel gives you a good understanding how these parameters affect the properties of interest. The ultimate goal is that we obtain a good understanding of the effect of interference competition on predator-prey population dynamics  in terms of biology!
 
 
 ```{r echo=FALSE, eval=FALSE}
