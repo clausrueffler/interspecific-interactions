@@ -81,6 +81,7 @@ The goal of this exercise is to investigate how interference competition affects
 *The RMA-model predicts that predation significantly reduces equilibrium prey population size.* At equilibrium with predators present the resource density is given by $R^* = d/(a(e - hd))$. This value is usually much lower than $K$, the resource density in the absence of predation. Note, that this equilibrium density depends only on parameters of the predator. How is this prediction modified by interference competition? Does the prey species suffer or benefit from interference competition between predators?
 Can you sketch a bifurcation diagram showing the predator and prey equilibrium population density if the strength of interference competition (determined by the parameter $g$) gradually increases, either in absolute terms or relative to the length of the handling time $h$.
 How bad is predation for prey populations, what do you conclude? If you were to write the next ecology text book, what would be your take-home message for the next generation of students based on this model that incorporates interference competition?
+Similarly, if interference competition changes the equilibrium prey density, how does this, in turn, affect equilibrium predator density?
 
 2)
 *The RMA-model predicts sustained population cycles.* Specifically, the equilibrium point given by the intersection of the two isoclines becomes unstable if $K > (e + hd)/(ah(e - hd))$. If this condition is fulfilled, a never-ending predator-prey cycle is predicted. How does interference competition affect this prediction? Does it facilitate or hinder cyclic dynamics? How is the amplitude of cycles affected by interference competition?
@@ -100,4 +101,202 @@ iv)
 You should mostly vary three parameter, namely $h$, $g$, and $K$.
 You vary $h$ (the time it takes to handle a prey) and $g$ (the time it takes to fight with another predator) to change how handling time and interference competition affect the model predictions. You can vary these parameters in many different ways, for example, you could vary both $g$ between $0.001$ and $0.5$ and $h$ from $0.001$ to $0.3$ in steps of $0.1$ (you have to avoid using $g$ and $h$ exactly equal to $0$ as then the formulas for the isoclines result in error messages). This would give you $4 * 6 = 24$  parameter combinations.
 You vary $K$ because increasing it makes population cycles more likely.
-But these are just some ideas. Do whatever you feel gives you a good understanding how these parameters affect the properties of interest!
+
+But these are just suggestions. Do whatever you feel gives you a good understanding how these parameters affect the properties of interest. The ultimate goal is that we obtain a good understanding of the effect of interference competition on predator-prey population dynamics  in terms of biology!
+
+
+```{r echo=FALSE, eval=FALSE}
+library(knitr)
+library(kableExtra)
+
+tab <- data.frame(
+  g = c("0.00", "0.05", "0.10", "0.15", "0.20"),
+  "0.00" = "",
+  "0.05" = "",
+  "0.10" = "",
+  "0.15" = "",
+  "0.20" = "",
+  check.names = FALSE
+)
+
+kable(tab, align = "c") %>%
+  add_header_above(c(" " = 1, "h" = 5))
+```
+
+
+\begin{table}
+\centering \begin{tabular}{c|ccccc}\hline
+& \multicolumn{5}{c}{$h$} \\
+\cline{2-6} $g$ & 0.00 & 0.05 & 0.10 & 0.15 & 0.20 \\
+\hline 0.00 & & & & & \\
+0.05 & & & & & \\
+0.10 & & & & & \\
+0.15 & & & & & \\
+0.20 & & & & & \\ \hline
+\end{tabular} \caption{Values for combinations of parameters $g$ and $h$.}
+\end{table}
+
+
+
+
+```{r echo=FALSE, eval=FALSE}
+predprey.interference <- function(t, y, p) {
+  R <- y[1]
+  C <- y[2]
+  with(as.list(p), {
+    dR.dt <- r * R * (1 - R / k) - a * C * R / (1 + a * h * R + a * g * C)
+    dC.dt <- (e * a * C * R) / (1 + a * h * R + a * g * C) - d * C
+    list(c(dR.dt, dC.dt))
+  })
+}
+
+r <- 0.5
+e <- 0.05
+a <- 0.05
+d <- 0.05
+k <- 250
+h <- 0.1
+g <- 0.00001
+
+R0 <- 20
+C0 <- 5
+
+params <- c(r = r, k = k, a = a, h = h, g = g, e = e, d = d)
+MaxTime <- 1000 # you can increase MaxTime if you think the dynamics have not yet reached their "endpoint"
+Time <- seq(0, MaxTime, by = 0.1)
+interference.out <- ode(c(R0, C0), Time, predprey.interference, params)
+
+matplot(Time, (interference.out[, 2:3]), type = "l", lty = 1:2, col=1, ylab = "Population Size", xlab="Time")
+legend("top", c(expression("resource"), expression("consumer")), lty = 1:2, bty = "n")
+
+plot(interference.out[, 2], interference.out[, 3], type = "l",  lty = 1, col = 1, xlim = c(0, 100), ylim = c(0, 20), ylab = "consumer", xlab = "resource")
+abline(a = -1/(a*g), b = (e - d * h) / (d * g), lty = 2, col = "blue") # consumer isocline, an angled line
+
+# to produce the graph for the resource isocline requires a bit more work since the now becomes a "curve" instead of a straight line
+R <- 0:k
+Riso <- function(R, r, k, a, h, g, e){
+  (((1 + a * h * R) * (k - R) * r) / (a * k - a * g * (k - R) * r))
+  }
+curve(Riso(x, r, k, a, h, g, e), from = 0, to = k, type = "l", lty =2, ylab = "consumer", xlab = "resource", col = "red", ylim = c(0, 10), add = TRUE) # resource isocline
+```
+
+
+```{r echo=FALSE, eval=FALSE}
+# parameters
+r <- 1
+a <- 1
+h <- 0.1
+g <- 0.000001
+e <- 0.5
+d <- 0.1
+
+# predator isocline
+Cstar <- function(R){
+  (a * (e - d * h) * R - d) / (a * d * g)
+}
+
+# prey equilibrium equation after substitution
+prey_eq <- function(R, K){
+
+  C <- Cstar(R)
+
+  f <- a * R / (1 + a * h * R + a * g * C)
+
+  r * R * (1 - R / K) - f * C
+}
+
+Kvals <- seq(0.23, 2, by = 0.05)
+
+R.eq <- rep(NA, length(Kvals))
+C.eq <- rep(NA, length(Kvals))
+
+for(i in seq_along(Kvals)){
+
+  K <- Kvals[i]
+
+  sol <- uniroot(
+    prey_eq,
+    interval = c(0.01, K),
+    K = K
+  )$root
+
+  R.eq[i] <- sol
+  C.eq[i] <- Cstar(sol)
+}
+
+plot(Kvals, R.eq,
+     type = "l",
+     lwd = 2,
+     col = "blue",
+     ylim = c(0, max(R.eq, C.eq)),
+     xlab = "Carrying capacity K",
+     ylab = "Equilibrium density")
+
+lines(Kvals, C.eq,
+      lwd = 2,
+      col = "red")
+
+legend("center",
+       legend = c(expression(R^"*"),
+                  expression(C^"*")),
+       col = c("blue", "red"),
+       lwd = 2)
+```
+
+```{r echo=FALSE, eval=FALSE}
+Rstar <- function(K, a, e, d, h, g, r){
+
+  (a * K * (d * h + e * (-1 + g * r)) +
+     sqrt(a * K *
+            (4 * d * e * g * r +
+               a * K * (-e + d * h + e * g * r)^2))) /
+    (2 * a * e * g * r)
+
+}
+
+Cstar <- function(K, a, e, d, h, g, r){
+
+  (-2 * d * e * g * r +
+     a * (e - d * h) * K * (d * h + e * (-1 + g * r)) +
+     e * sqrt(a * K *
+                (4 * d * e * g * r +
+                   a * K * (-e + d * h + e * g * r)^2)) -
+     d * h * sqrt(a * K *
+                    (4 * d * e * g * r +
+                       a * K * (-e + d * h + e * g * r)^2))) /
+    (2 * a * d * e * g^2 * r)
+
+}
+
+# parameters
+a <- 1
+e <- 0.5
+d <- 0.2
+h <- 0.2
+g <- 0.000001
+r <- 1
+
+K <- seq(0, 1, by = 0.01)
+
+R.eq <- Rstar(K, a, e, d, h, g, r)
+C.eq <- Cstar(K, a, e, d, h, g, r)
+
+plot(K, R.eq,
+     type = "l",
+     lwd = 2,
+     col = "blue",
+     ylim = c(0, 1),
+     xlab = "Carrying capacity K",
+     ylab = "Equilibrium density")
+
+lines(K, C.eq,
+      lwd = 2,
+      col = "red")
+
+legend("topleft",
+       legend = c(expression(R^"*"),
+                  expression(C^"*")),
+       col = c("blue", "red"),
+       lwd = 2)
+```
+
