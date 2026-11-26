@@ -15,7 +15,7 @@ klippy::klippy(position = c('top', 'right'))
 
 # A predator-prey model with interference competition
 
-Our starting point is the Rosenzweig-MacArthur model, the last model from the previous tab. This model is based on a Holling type-II functional response. This means that the per-capita resource uptake is a saturating function of resource density, where the saturation is the result of predators spending more and more time handling prey instead of looking for new prey. We derived this functional response from first principle in Ecology D.
+Our starting point is the Rosenzweig-MacArthur model, the last model from the previous tab. This model is based on a Holling type-II functional response. This means that the per-capita resource uptake is a saturating function of resource density, where the saturation is the result of predators spending more and more time handling prey instead of looking for new prey. We derived this functional response from first principles in Ecology D.
 
 Let us assume that the same logic that led to the Holling type-II functional response also applies to interference competition: Each time a predator encounters another predator individual, the two predator interfere (fight) with each other for a time interval of length $g$. Including this leads to
 
@@ -99,9 +99,13 @@ You can read the equilibrium density as the last entry in the data frame that st
 
 iv)
 You should mostly vary three parameter, namely $h$, $g$, and $K$.
-You vary $h$ (the time it takes to handle a prey) and $g$ (the time it takes to fight with another predator) to change how handling time and interference competition affect the model predictions. You can vary these parameters in many different ways, for example, you could vary both $g$ and $h$ between $0.001$ and $0.2$ in steps of $0.05$ (you have to avoid using $g$ and $h$ exactly equal to one as then the formulas for the isoclines do not work). This would give you 25 parameter combinations.
+You vary $h$ (the time it takes to handle a prey) and $g$ (the time it takes to fight with another predator) to change how handling time and interference competition affect the model predictions. You can vary these parameters in many different ways, for example, you could vary both $g$ and $h$ between $0.001$ and $0.2$ in steps of $0.05$ (you have to avoid using $g$ and $h$ exactly equal to $0$ as then the formulas for the isoclines result in error messages). This would give you 25 parameter combinations.
 You vary $K$ because increasing it makes population cycles more likely.
+<<<<<<< HEAD
 But these are just suggestions. Do whatever you feel gives you a good understanding how these parameters affect the properties of interest. The ultimate goal is that we obtain a good understanding of the effect of interference competition on predator-prey population dynamics  in terms of biology!
+=======
+But these are just some ideas. Do whatever you feel gives you a good understanding how these parameters affect the properties of interest!
+>>>>>>> 5d49503ff4d2ed9d75e501e431e462f90cbc78c6
 
 
 ```{r echo=FALSE, eval=FALSE}
